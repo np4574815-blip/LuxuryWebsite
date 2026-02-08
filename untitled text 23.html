@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite Luxury Adventure</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+html,body{background:#050505;color:#fff;overflow-x:hidden}
+
+/* ===== OPENING CINEMATIC ===== */
+#loader{
+  position:fixed;inset:0;
+  background:radial-gradient(circle,#111,#000 70%);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+}
+#loader h1{
+  color:gold;
+  font-size:3.2rem;
+  letter-spacing:10px;
+  animation:nebula 2.6s ease forwards;
+}
+@keyframes nebula{
+  0%{opacity:0;transform:scale(.6)}
+  60%{opacity:1;transform:scale(1.05)}
+  100%{opacity:0;transform:scale(2)}
+}
+
+/* ===== PREMIUM GOLD BACKGROUND ===== */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background:
+  radial-gradient(circle at 20% 30%,rgba(255,215,0,.18),transparent 40%),
+  radial-gradient(circle at 80% 70%,rgba(255,140,0,.15),transparent 45%);
+  z-index:-2;
+}
+
+/* ===== FLOATING GOLD ORBS ===== */
+.orb{
+  position:fixed;
+  width:220px;height:220px;
+  background:radial-gradient(circle,rgba(255,215,0,.28),transparent 65%);
+  border-radius:50%;
+  animation:float 18s ease-in-out infinite;
+  pointer-events:none;
+}
+.orb:nth-child(1){top:15%;left:8%}
+.orb:nth-child(2){bottom:20%;right:10%;animation-duration:26s}
+@keyframes float{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-100px)}
+  100%{transform:translateY(0)}
+}
+
+/* ===== HERO ===== */
+.hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.hero h2{
+  font-size:4rem;
+  background:linear-gradient(90deg,#fff,gold,#fff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero p{opacity:.7;margin-top:20px;font-size:1.1rem}
+
+/* ===== DEMAND COUNTER ===== */
+.demand{
+  margin-top:18px;
+  color:gold;
+  font-size:.95rem;
+  opacity:.85;
+}
+
+/* ===== BUTTON ===== */
+.lux-btn{
+  margin-top:45px;
+  padding:16px 46px;
+  border-radius:60px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  background:linear-gradient(90deg,#d4af37,#ffcc70);
+  color:#000;
+  box-shadow:0 25px 60px rgba(212,175,55,.45);
+}
+.lux-btn:hover{transform:scale(1.06)}
+
+/* ===== SECTIONS ===== */
+section{padding:120px 10%}
+.title{
+  font-size:2.6rem;
+  margin-bottom:70px;
+  color:gold;
+}
+
+/* ===== EXPERIENCE CARDS ===== */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:45px;
+}
+.card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,215,0,.18);
+  padding:45px;
+  border-radius:22px;
+  position:relative;
+  overflow:hidden;
+  transition:.4s;
+}
+.card::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,215,0,.25),transparent);
+  transform:translateX(-100%);
+  transition:.6s;
+}
+.card:hover::after{transform:translateX(100%)}
+.card:hover{
+  transform:translateY(-14px) scale(1.03);
+  box-shadow:0 45px 90px rgba(255,215,0,.25);
+}
+
+/* ===== CONTACT ===== */
+form{
+  max-width:520px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+input,textarea{
+  background:#0c0c0c;
+  border:1px solid rgba(255,215,0,.3);
+  padding:15px;
+  color:white;
+  border-radius:12px;
+}
+button{
+  padding:16px;
+  background:linear-gradient(90deg,gold,orange);
+  border:none;
+  border-radius:60px;
+  font-weight:600;
+  cursor:pointer;
+}
+#msg{text-align:center;margin-top:15px;color:gold}
+
+/* ===== BOOKING MODAL ===== */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.88);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.modal-box{
+  background:#0b0b0b;
+  border:1px solid rgba(255,215,0,.35);
+  padding:40px;
+  border-radius:22px;
+  width:340px;
+  text-align:center;
+}
+.modal-box h2{color:gold;margin-bottom:18px}
+.modal-box select,.modal-box input{
+  width:100%;
+  margin-bottom:15px;
+  padding:12px;
+  background:#111;
+  border:1px solid rgba(255,215,0,.35);
+  color:#fff;
+  border-radius:10px;
+}
+#slots{font-size:.85rem;color:#ffcc70;margin-bottom:12px}
+#status{margin-top:12px;color:gold;font-size:.9rem}
+#goldLoad{
+  height:4px;
+  width:0;
+  background:linear-gradient(90deg,gold,orange);
+  border-radius:5px;
+  margin-top:15px;
+  transition:1.5s;
+}
+
+/* ===== WHATSAPP FLOAT ===== */
+.wa-float{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:white;
+  padding:14px 22px;
+  border-radius:50px;
+  font-weight:600;
+  text-decoration:none;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.07)}
+  100%{transform:scale(1)}
+}
+
+/* ===== FOOTER ===== */
+footer{text-align:center;padding:40px;opacity:.5}
+</style>
+</head>
+
+<body>
+
+<div id="loader"><h1>LUXURY</h1></div>
+<div class="orb"></div>
+<div class="orb"></div>
+
+<div class="hero">
+  <div>
+    <h2>Elite Luxury Adventures</h2>
+    <p>High-End • Exclusive • Unforgettable</p>
+    <div class="demand">🔥 <b id="demandNum">23</b> people viewing this right now</div>
+    <button class="lux-btn" onclick="openBooking()">Book Luxury Experience</button>
+  </div>
+</div>
+
+<section>
+  <h3 class="title">Signature Experiences</h3>
+  <div class="cards">
+    <div class="card">Jet Ski — Gold Coast Rush</div>
+    <div class="card">Parachute — Sky Elite Drop</div>
+    <div class="card">Water Sports — Luxury Collection</div>
+  </div>
+</section>
+
+<section>
+  <h3 class="title">Contact Concierge</h3>
+  <form id="contactForm">
+    <input required placeholder="Name">
+    <input type="email" required placeholder="Email">
+    <textarea required placeholder="Message"></textarea>
+    <button type="submit">Send Inquiry</button>
+    <div id="msg"></div>
+  </form>
+</section>
+
+<footer>© Elite Luxury Adventure</footer>
+
+<!-- ===== BOOKING MODAL ===== -->
+<div id="bookingModal" class="modal">
+  <div class="modal-box">
+    <h2>Luxury Booking</h2>
+    <p id="slots">⚠ Only 3 luxury slots left</p>
+    <select id="experience">
+      <option>Jet Ski Experience</option>
+      <option>Parachute Adventure</option>
+      <option>Elite Water Sports</option>
+    </select>
+    <input type="date" id="date" required>
+    <button onclick="submitBooking()">Confirm Booking</button>
+    <div id="goldLoad"></div>
+    <p id="status"></p>
+  </div>
+</div>
+
+<a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="wa-float">
+  💬 Concierge
+</a>
+
+<script>
+window.onload=()=>setTimeout(()=>loader.style.display="none",2500);
+
+/* Demand Counter */
+setInterval(()=>{
+  demandNum.innerText = Math.floor(20 + Math.random()*15);
+},3000);
+
+/* Contact */
+contactForm.onsubmit=e=>{
+  e.preventDefault();
+  msg.innerText="Message sent successfully ✔";
+}
+
+/* Booking */
+function openBooking(){
+  bookingModal.style.display="flex";
+}
+
+function submitBooking(){
+  const left = Math.floor(2 + Math.random()*3);
+  slots.innerText = `⚠ Only ${left} luxury slots left for selected date`;
+  status.innerText="Processing your luxury request...";
+  goldLoad.style.width="100%";
+
+  setTimeout(()=>{
+    const text=`Luxury Booking Inquiry:%0AExperience: ${experience.value}%0ADate: ${date.value}`;
+    window.open(`https://wa.me/91XXXXXXXXXX?text=${text}`,"_blank");
+    status.innerText="Redirecting to concierge ✔";
+  },1800);
+}
+
+/* Exit Intent */
+document.addEventListener("mouseout",e=>{
+  if(e.clientY<0){openBooking();}
+});
+</script>
+
+</body>
+</html>
