@@ -11,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 html,body{background:#050505;color:#fff;overflow-x:hidden}
 
-/* ===== OPENING CINEMATIC ===== */
+/* ===== LOADER ===== */
 #loader{
   position:fixed;inset:0;
   background:radial-gradient(circle,#111,#000 70%);
@@ -30,7 +30,7 @@ html,body{background:#050505;color:#fff;overflow-x:hidden}
   100%{opacity:0;transform:scale(2)}
 }
 
-/* ===== PREMIUM GOLD BACKGROUND ===== */
+/* ===== BACKGROUND GOLD HEAT ===== */
 body::before{
   content:"";
   position:fixed;inset:0;
@@ -40,7 +40,7 @@ body::before{
   z-index:-2;
 }
 
-/* ===== FLOATING GOLD ORBS ===== */
+/* ===== FLOATING ORBS ===== */
 .orb{
   position:fixed;
   width:220px;height:220px;
@@ -73,7 +73,6 @@ body::before{
 }
 .hero p{opacity:.7;margin-top:20px;font-size:1.1rem}
 
-/* ===== DEMAND COUNTER ===== */
 .demand{
   margin-top:18px;
   color:gold;
@@ -81,7 +80,6 @@ body::before{
   opacity:.85;
 }
 
-/* ===== BUTTON ===== */
 .lux-btn{
   margin-top:45px;
   padding:16px 46px;
@@ -97,13 +95,9 @@ body::before{
 
 /* ===== SECTIONS ===== */
 section{padding:120px 10%}
-.title{
-  font-size:2.6rem;
-  margin-bottom:70px;
-  color:gold;
-}
+.title{font-size:2.6rem;margin-bottom:70px;color:gold}
 
-/* ===== EXPERIENCE CARDS ===== */
+/* ===== CARDS ===== */
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -183,15 +177,28 @@ button{
   color:#fff;
   border-radius:10px;
 }
-#slots{font-size:.85rem;color:#ffcc70;margin-bottom:12px}
-#status{margin-top:12px;color:gold;font-size:.9rem}
+#slots{font-size:.85rem;color:#ffcc70;margin-bottom:10px}
+#successTick{font-size:42px;color:gold;display:none}
+#status{margin-top:10px;color:gold;font-size:.9rem}
+#refId{font-size:.8rem;color:#ffcc70;margin-top:4px}
 #goldLoad{
-  height:4px;
-  width:0;
+  height:4px;width:0;
   background:linear-gradient(90deg,gold,orange);
   border-radius:5px;
   margin-top:15px;
   transition:1.5s;
+}
+#backBtn{
+  display:none;
+  margin-top:15px;
+  width:100%;
+  padding:14px;
+  border-radius:50px;
+  border:1px solid rgba(255,215,0,.4);
+  background:transparent;
+  color:gold;
+  font-weight:600;
+  cursor:pointer;
 }
 
 /* ===== WHATSAPP FLOAT ===== */
@@ -214,7 +221,6 @@ button{
   100%{transform:scale(1)}
 }
 
-/* ===== FOOTER ===== */
 footer{text-align:center;padding:40px;opacity:.5}
 </style>
 </head>
@@ -222,14 +228,13 @@ footer{text-align:center;padding:40px;opacity:.5}
 <body>
 
 <div id="loader"><h1>LUXURY</h1></div>
-<div class="orb"></div>
-<div class="orb"></div>
+<div class="orb"></div><div class="orb"></div>
 
 <div class="hero">
   <div>
     <h2>Elite Luxury Adventures</h2>
     <p>High-End • Exclusive • Unforgettable</p>
-    <div class="demand">🔥 <b id="demandNum">23</b> people viewing this right now</div>
+    <div class="demand">🔥 <b id="demandNum">23</b> people viewing right now</div>
     <button class="lux-btn" onclick="openBooking()">Book Luxury Experience</button>
   </div>
 </div>
@@ -256,7 +261,7 @@ footer{text-align:center;padding:40px;opacity:.5}
 
 <footer>© Elite Luxury Adventure</footer>
 
-<!-- ===== BOOKING MODAL ===== -->
+<!-- BOOKING MODAL -->
 <div id="bookingModal" class="modal">
   <div class="modal-box">
     <h2>Luxury Booking</h2>
@@ -269,21 +274,20 @@ footer{text-align:center;padding:40px;opacity:.5}
     <input type="date" id="date" required>
     <button onclick="submitBooking()">Confirm Booking</button>
     <div id="goldLoad"></div>
+    <div id="successTick">✔</div>
     <p id="status"></p>
+    <p id="refId"></p>
+    <button id="backBtn" onclick="closeBooking()">← Back to Website</button>
   </div>
 </div>
 
-<a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="wa-float">
-  💬 Concierge
-</a>
+<a href="https://wa.me/9305893662" target="_blank" class="wa-float">💬 Concierge</a>
 
 <script>
 window.onload=()=>setTimeout(()=>loader.style.display="none",2500);
 
-/* Demand Counter */
-setInterval(()=>{
-  demandNum.innerText = Math.floor(20 + Math.random()*15);
-},3000);
+/* Demand */
+setInterval(()=>{demandNum.innerText=Math.floor(20+Math.random()*15)},3000);
 
 /* Contact */
 contactForm.onsubmit=e=>{
@@ -297,22 +301,37 @@ function openBooking(){
 }
 
 function submitBooking(){
-  const left = Math.floor(2 + Math.random()*3);
-  slots.innerText = `⚠ Only ${left} luxury slots left for selected date`;
+  const ref="LX-"+Math.floor(10000+Math.random()*90000);
+  slots.innerText=`⚠ Only ${Math.floor(2+Math.random()*3)} luxury slots left`;
   status.innerText="Processing your luxury request...";
-  goldLoad.style.width="100%";
+  goldLoad.style.width="0";
+  successTick.style.display="none";
+  refId.innerText="";
+  backBtn.style.display="none";
+
+  setTimeout(()=>goldLoad.style.width="100%",100);
 
   setTimeout(()=>{
-    const text=`Luxury Booking Inquiry:%0AExperience: ${experience.value}%0ADate: ${date.value}`;
+    successTick.style.display="block";
+    status.innerText="Booking confirmed";
+    refId.innerText=`Reference ID: ${ref}`;
+
+    const text=
+      `Luxury Booking Inquiry%0ARef ID: ${ref}%0AExperience: ${experience.value}%0ADate: ${date.value}`;
     window.open(`https://wa.me/91XXXXXXXXXX?text=${text}`,"_blank");
-    status.innerText="Redirecting to concierge ✔";
+
+    backBtn.style.display="block";
+    setTimeout(closeBooking,5000);
   },1800);
 }
 
-/* Exit Intent */
-document.addEventListener("mouseout",e=>{
-  if(e.clientY<0){openBooking();}
-});
+function closeBooking(){
+  bookingModal.style.display="none";
+  goldLoad.style.width="0";
+  status.innerText="";
+  successTick.style.display="none";
+  refId.innerText="";
+}
 </script>
 
 </body>
